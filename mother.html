@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 28px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #050505;
+      color: #d7d7d7;
+      font-family: "Courier New", monospace;
+    }
+
+    main {
+      width: min(100%, 620px);
+      animation: appear 1.2s ease;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      color: #707070;
+      font-size: 10px;
+      letter-spacing: .14em;
+    }
+
+    header {
+      margin: 42px 0 30px;
+    }
+
+    h1 {
+      font-size: clamp(18px, 4vw, 24px);
+      font-weight: normal;
+      letter-spacing: .16em;
+      margin: 0 0 12px;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: #707070;
+      letter-spacing: .12em;
+    }
+
+    .rule {
+      height: 1px;
+      background: #353535;
+      margin: 24px 0;
+    }
+
+    .section-label {
+      font-size: 11px;
+      color: #969696;
+      letter-spacing: .12em;
+      margin-bottom: 14px;
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: minmax(120px, 1fr) 2fr;
+      gap: 12px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .key {
+      color: #707070;
+    }
+
+    .value {
+      overflow-wrap: anywhere;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid #4b4b4b;
+      background: #080808;
+      color: #eee;
+      border-radius: 0;
+      padding: 14px;
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #aaa;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #666;
+      background: transparent;
+      color: #ddd;
+      font: inherit;
+      font-size: 11px;
+      letter-spacing: .16em;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+
+    button:hover {
+      background: #ddd;
+      color: #050505;
+    }
+
+    button:focus-visible {
+      outline: 1px solid #ddd;
+      outline-offset: 4px;
+    }
+
+    button.danger {
+      border-color: #7b2929;
+      color: #d68a8a;
+    }
+
+    button.danger:hover {
+      background: #7b2929;
+      color: #fff;
+    }
+
+    .small {
+      font-size: 10px;
+      line-height: 1.9;
+      color: #666;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .warning {
+      color: #c77b7b;
+      font-size: 12px;
+      line-height: 2;
+      border-left: 2px solid #7b2929;
+      padding: 4px 0 4px 14px;
+      margin: 24px 0;
+    }
+
+    .result {
+      text-align: center;
+      padding: 24px 0;
+    }
+
+    .result h2 {
+      font-size: 18px;
+      font-weight: normal;
+      letter-spacing: .15em;
+      margin: 0 0 30px;
+    }
+
+    .result .status-grid {
+      text-align: left;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 7px;
+      height: 13px;
+      background: #aaa;
+      vertical-align: -2px;
+      margin-left: 5px;
+      animation: blink 1s steps(2, start) infinite;
+    }
+
+    #fade {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s;
+    }
+
+    #fade.active {
+      opacity: 1;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes blink {
+      to {
+        visibility: hidden;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .status-grid {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .value {
+        margin-bottom: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      main,
+      .cursor {
+        animation: none;
+      }
+
+      #fade,
+      button {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+
+    <div class="topline">
+      <span>MOTHER SYSTEM</span>
+      <span>LOCAL ADMIN CONSOLE / 01</span>
+    </div>
+
+    <!-- Main screen -->
+    <section id="main-screen">
+
+      <header>
+        <h1>ENTITY MANAGEMENT</h1>
+        <div class="subtitle">CENTRAL INSTANCE CONTROL</div>
+      </header>
+
+      <div class="rule"></div>
+
+      <div class="section-label">SYSTEM STATUS</div>
+
+      <div class="status-grid">
+        <div class="key">CORE STATUS</div>
+        <div class="value">ONLINE</div>
+
+        <div class="key">INSTANCE</div>
+        <div class="value">1 ACTIVE ENTITY</div>
+
+        <div class="key">ACCESS LEVEL</div>
+        <div class="value">LOCAL ADMINISTRATOR</div>
+      </div>
+
+      <div class="rule"></div>
+
+      <form id="delete-form">
+        <div class="section-label">INSTANCE TERMINATION</div>
+
+        <label for="entity-name">ENTER ENTITY IDENTIFIER</label>
+        <input id="entity-name" type="text" autocomplete="off" spellcheck="false" required>
+
+        <div style="height: 20px"></div>
+
+        <button type="submit">SEARCH INSTANCE</button>
+      </form>
+
+      <p class="small" style="margin-top: 28px">
+        NOTICE: TERMINATION MAY AFFECT ALL ASSOCIATED PROCESSES.<br>
+        THIS ACTION CANNOT BE UNDONE.
+      </p>
+
+    </section>
+
+    <!-- Confirmation screen -->
+    <section id="confirm-screen" class="hidden">
+
+      <header>
+        <h1>INSTANCE LOCATED</h1>
+        <div class="subtitle">MATCH FOUND / 01</div>
+      </header>
+
+      <div class="rule"></div>
+
+      <div class="status-grid">
+        <div class="key">ENTITY ID</div>
+        <div class="value" id="confirm-name"></div>
+
+        <div class="key">INSTANCE STATUS</div>
+        <div class="value">ACTIVE</div>
+
+        <div class="key">DATA INTEGRITY</div>
+        <div class="value">UNKNOWN</div>
+      </div>
+
+      <div class="warning">
+        WARNING: THIS OPERATION WILL DELETE THE CURRENT INSTANCE DATA.<br>
+        RECOVERY IS NOT GUARANTEED.
+      </div>
+
+      <p class="small">CONFIRM INSTANCE TERMINATION?</p>
+
+      <div style="height: 16px"></div>
+
+      <button class="danger" id="delete-button">
+        DELETE INSTANCE
+      </button>
+
+      <div style="height: 12px"></div>
+
+      <button id="back-button">CANCEL</button>
+
+    </section>
+
+    <!-- Result screen -->
+    <section id="result-screen" class="hidden result">
+
+      <div class="subtitle">MOTHER SYSTEM / PROCESS REPORT</div>
+
+      <div class="rule"></div>
+
+      <h2>TERMINATION COMPLETE</h2>
+
+      <div class="status-grid">
+        <div class="key">ENTITY DATA</div>
+        <div class="value">NOT FOUND</div>
+
+        <div class="key">INSTANCE STATUS</div>
+        <div class="value">TERMINATED</div>
+
+        <div class="key">SYSTEM STATUS</div>
+        <div class="value">ONLINE</div>
+      </div>
+
+      <div class="rule"></div>
+
+      <p class="small">
+        NO ACTIVE INSTANCE DETECTED<span class="cursor"></span>
+      </p>
+
+    </section>
+
+  </main>
+
+  <div id="fade"></div>
+
+  <script>
+    const form = document.getElementById("delete-form");
+    const entityInput = document.getElementById("entity-name");
+
+    const mainScreen = document.getElementById("main-screen");
+    const confirmScreen = document.getElementById("confirm-screen");
+    const resultScreen = document.getElementById("result-screen");
+    const fade = document.getElementById("fade");
+
+    let entityName = "";
+    let finished = false;
+
+    // Search for the entity
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (finished) return;
+
+      entityName = entityInput.value.trim();
+
+      if (entityName !== "Mishandra") {
+        entityInput.setCustomValidity(
+          "NO MATCHING INSTANCE FOUND."
+        );
+        entityInput.reportValidity();
+        entityInput.setCustomValidity("");
+        return;
+      }
+
+      document.getElementById("confirm-name").textContent =
+        entityName;
+
+      mainScreen.classList.add("hidden");
+      confirmScreen.classList.remove("hidden");
+    });
+
+    // Cancel deletion
+    document.getElementById("back-button").addEventListener("click", () => {
+      confirmScreen.classList.add("hidden");
+      mainScreen.classList.remove("hidden");
+      entityInput.focus();
+    });
+
+    // Confirm deletion
+    document.getElementById("delete-button").addEventListener("click", () => {
+      if (finished) return;
+
+      finished = true;
+      fade.classList.add("active");
+
+      setTimeout(() => {
+        confirmScreen.classList.add("hidden");
+        resultScreen.classList.remove("hidden");
+        window.scrollTo(0, 0);
+
+        setTimeout(() => {
+          fade.classList.remove("active");
+        }, 250);
+      }, 1100);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #050505;
+            color: #ddd;
+            font-family: "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+        }
+
+        main {
+            width: min(100%, 560px);
+            animation: appear 1.5s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 52px;
+        }
+
+        .system {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: #666;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 19px;
+            font-weight: normal;
+            letter-spacing: 0.2em;
+            margin: 0 0 16px;
+        }
+
+        .subtitle {
+            font-size: 11px;
+            color: #777;
+            letter-spacing: 0.12em;
+        }
+
+        .line {
+            height: 1px;
+            background: #333;
+            margin: 28px 0;
+        }
+
+        label {
+            display: block;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+
+        input,
+        textarea {
+            display: block;
+            width: 100%;
+            background: #080808;
+            border: 1px solid #444;
+            border-radius: 0;
+            padding: 13px;
+            color: #eee;
+            font: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #aaa;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .field {
+            margin-bottom: 28px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            color: #ddd;
+            border: 1px solid #666;
+            font: inherit;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #ddd;
+            color: #050505;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: default;
+        }
+
+        .foot {
+            margin-top: 36px;
+            text-align: center;
+            font-size: 10px;
+            line-height: 2;
+            color: #444;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .message {
+            font-size: 13px;
+            line-height: 2.2;
+            text-align: center;
+            margin: 28px 0;
+        }
+
+        .warning {
+            border: 1px solid #444;
+            padding: 18px;
+            color: #aaa;
+            font-size: 12px;
+            line-height: 2;
+            margin: 28px 0;
+        }
+
+        .status {
+            text-align: center;
+            font-size: 12px;
+            line-height: 2.4;
+            color: #aaa;
+            overflow-wrap: anywhere;
+        }
+
+        .terror {
+            color: #c01818;
+            text-shadow: 0 0 8px rgba(190, 0, 0, 0.35);
+        }
+
+        #fade {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s;
+        }
+
+        #fade.active {
+            opacity: 1;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            main {
+                animation: none;
+            }
+
+            #fade {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section id="input-screen">
+            <div class="header">
+                <div class="system">HADUKI FACILITY / TERMINAL 01</div>
+                <h1>契約書</h1>
+                <div class="subtitle">CONTRACT INTERFACE</div>
+            </div>
+
+            <div class="line"></div>
+
+            <form id="contract-form">
+                <div class="field">
+                    <label for="entity">契約対象名を入力してください。</label>
+                    <input id="entity" type="text" autocomplete="off" required>
+                </div>
+
+                <div class="field">
+                    <label for="wish">あなたの願いを入力してください。</label>
+                    <textarea id="wish" required></textarea>
+                </div>
+
+                <button type="submit">CONTINUE</button>
+            </form>
+
+            <div class="foot">
+                YOUR WISH WILL BE PROCESSED<br>
+                ALL CONTRACTS ARE FINAL
+            </div>
+        </section>
+
+        <section id="confirm-screen" class="hidden">
+            <div class="header">
+                <div class="system">CONTRACT VERIFICATION</div>
+                <h1>契約内容の確認</h1>
+                <div class="subtitle">PLEASE REVIEW THE FOLLOWING</div>
+            </div>
+
+            <div class="line"></div>
+
+            <label>契約対象</label>
+            <div id="confirm-entity" class="status"></div>
+
+            <div class="line"></div>
+
+            <label>願望内容</label>
+            <div id="confirm-wish" class="status"></div>
+
+            <div class="warning">
+                契約の成立後、契約者は対価を支払うものとする。<br>
+                契約の撤回は認められない。
+            </div>
+
+            <p class="message">以上の内容で契約を締結しますか？</p>
+
+            <button id="accept">ACCEPT CONTRACT</button>
+            <div style="height: 12px"></div>
+            <button id="cancel">CANCEL</button>
+        </section>
+
+        <section id="result-screen" class="hidden">
+            <div class="header">
+                <div class="system">CONTRACT SYSTEM</div>
+                <h1>契約成立</h1>
+                <div class="subtitle">PROCESS COMPLETED</div>
+            </div>
+
+            <div class="line"></div>
+
+            <p class="message terror">
+                あなたの願いは受理されました。<br>
+                対価の徴収を開始します。
+            </p>
+
+            <div class="status" id="result-entity"></div>
+
+            <div class="foot">
+                THANK YOU FOR YOUR COOPERATION
+            </div>
+        </section>
+    </main>
+
+    <div id="fade"></div>
+
+    <script>
+        const form = document.getElementById("contract-form");
+        const inputScreen = document.getElementById("input-screen");
+        const confirmScreen = document.getElementById("confirm-screen");
+        const resultScreen = document.getElementById("result-screen");
+        const entityInput = document.getElementById("entity");
+        const wishInput = document.getElementById("wish");
+        const fade = document.getElementById("fade");
+
+        let entityName = "";
+        let wishText = "";
+        let completed = false;
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            entityName = entityInput.value.trim();
+            wishText = wishInput.value.trim();
+
+            if (!entityName || !wishText) return;
+
+            // 契約対象がミシャンドラでなければ先へ進めない
+            if (entityName !== "Mishandra") {
+                entityInput.setCustomValidity("対象を確認できません。");
+                entityInput.reportValidity();
+                entityInput.setCustomValidity("");
+                return;
+            }
+
+            document.getElementById("confirm-entity").textContent = entityName;
+            document.getElementById("confirm-wish").textContent = wishText;
+
+            inputScreen.classList.add("hidden");
+            confirmScreen.classList.remove("hidden");
+        });
+
+        document.getElementById("cancel").addEventListener("click", () => {
+            confirmScreen.classList.add("hidden");
+            inputScreen.classList.remove("hidden");
+        });
+
+        document.getElementById("accept").addEventListener("click", () => {
+            if (completed) return;
+            completed = true;
+
+            fade.classList.add("active");
+
+            setTimeout(() => {
+                confirmScreen.classList.add("hidden");
+                resultScreen.classList.remove("hidden");
+                document.getElementById("result-entity").textContent =
+                    "CONTRACT ENTITY: " + entityName;
+
+                window.scrollTo(0, 0);
+                fade.classList.remove("active");
+            }, 1300);
+        });
+    </script>
+</body>
+
+</html>

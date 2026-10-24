@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>1021</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Courier New", Courier, monospace;
+      background: #000;
+      color: #fff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #000;
+      color: #fff;
+    }
+
+    main {
+      width: min(92vw, 520px);
+      padding: 40px 24px;
+      text-align: center;
+      transition: opacity 0.5s ease;
+    }
+
+    h1 {
+      margin: 0 0 30px;
+      font-size: clamp(2rem, 7vw, 3rem);
+      font-weight: 400;
+      letter-spacing: .08em;
+    }
+
+    .symbol {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      margin: 0 auto 34px;
+      color: #888;
+    }
+
+    .dots {
+      display: grid;
+      grid-template-columns: repeat(2, 7px);
+      gap: 9px;
+    }
+
+    .dots span {
+      width: 7px;
+      height: 7px;
+      border: 1px solid #ddd;
+      border-radius: 50%;
+    }
+
+    .dots.two {
+      grid-template-columns: 7px;
+      gap: 9px;
+    }
+
+    .arrow {
+      width: 34px;
+      height: 1px;
+      background: #555;
+      position: relative;
+    }
+
+    .arrow::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: -3px;
+      width: 6px;
+      height: 6px;
+      border-top: 1px solid #888;
+      border-right: 1px solid #888;
+      transform: rotate(45deg);
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    input {
+      width: min(100%, 250px);
+      padding: 12px 14px;
+      border: 1px solid #666;
+      border-radius: 0;
+      background: #000;
+      color: #fff;
+      font: inherit;
+      font-size: 1rem;
+      outline-offset: 3px;
+    }
+
+    input::placeholder {
+      color: #777;
+    }
+
+    button {
+      padding: 12px 18px;
+      border: 1px solid #fff;
+      border-radius: 0;
+      background: #fff;
+      color: #000;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #ddd;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 1px solid #fff;
+      outline-offset: 4px;
+    }
+
+    #message {
+      min-height: 1.5em;
+      margin-top: 20px;
+      font-size: .9rem;
+      color: #ccc;
+    }
+
+    /* 暗転用のレイヤー */
+    #fade {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 1.2s ease;
+    }
+
+    #fade.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #fade {
+        transition-duration: 0.1s;
+      }
+
+      main {
+        transition-duration: 0.1s;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main id="main">
+    <h1>#ARANEA1021</h1>
+
+    <div class="symbol" aria-label="A symbol showing four points transforming into two">
+      <div class="dots">
+        <span></span><span></span>
+        <span></span><span></span>
+      </div>
+      <span class="arrow"></span>
+      <div class="dots two">
+        <span></span><span></span>
+      </div>
+    </div>
+
+    <form id="answer-form" autocomplete="off">
+      <label for="answer" hidden>Answer</label>
+      <input id="answer" name="answer" type="text" inputmode="numeric" placeholder="Enter your answer"
+        aria-label="Enter your answer" required>
+      <button type="submit">Submit</button>
+    </form>
+
+    <div id="message" role="status" aria-live="polite"></div>
+  </main>
+
+  <div id="fade" aria-hidden="true"></div>
+
+  <script>
+    const form = document.getElementById("answer-form");
+    const answer = document.getElementById("answer");
+    const message = document.getElementById("message");
+    const fade = document.getElementById("fade");
+    const main = document.getElementById("main");
+
+    let transitioning = false;
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (transitioning) return;
+
+      if (answer.value.trim() === "73") {
+        transitioning = true;
+
+        // 入力を受け付けないようにする
+        answer.disabled = true;
+        form.querySelector("button").disabled = true;
+
+        // 画面を暗転させてから次のページへ
+        fade.classList.add("active");
+
+        setTimeout(() => {
+          window.location.href = "stage2.html";
+        }, 1300);
+
+      } else {
+        message.textContent = "Incorrect. Try again.";
+        answer.focus();
+        answer.select();
+      }
+    });
+  </script>
+</body>
+
+</html>
