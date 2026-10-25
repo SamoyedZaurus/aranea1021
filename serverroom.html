@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERVER ROOM ACCESS</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #050505;
+            color: #bbb;
+            font-family: "Courier New", monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        main {
+            width: min(100%, 560px);
+            text-align: center;
+            animation: appear 2s ease;
+        }
+
+        .system {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            color: #555;
+            margin-bottom: 48px;
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: normal;
+            letter-spacing: 0.15em;
+            line-height: 2;
+            margin-bottom: 36px;
+        }
+
+        .line {
+            height: 1px;
+            background: #333;
+            margin: 28px 0;
+        }
+
+        .message {
+            font-size: 13px;
+            line-height: 2.5;
+            color: #aaa;
+        }
+
+        .status {
+            margin-top: 48px;
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            color: #555;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 7px;
+            height: 13px;
+            background: #777;
+            vertical-align: middle;
+            margin-left: 5px;
+            animation: blink 1s steps(2, start) infinite;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blink {
+            to {
+                visibility: hidden;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            main,
+            .cursor {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="system">HADUKI FACILITY / ACCESS CONTROL</div>
+
+        <h1>SERVER ROOM ACCESS</h1>
+
+        <div class="line"></div>
+
+        <p class="message">
+            認証コードを確認しました。<br>
+            サーバールームへの扉を解錠します。
+        </p>
+
+        <div class="line"></div>
+
+        <div class="status">
+            DOOR LOCK : RELEASED<br>
+            ACCESS GRANTED<span class="cursor"></span>
+        </div>
+    </main>
+</body>
+
+</html>

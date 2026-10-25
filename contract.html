@@ -10,6 +10,46 @@
             box-sizing: border-box;
         }
 
+        .lock-panel {
+            position: fixed;
+            left: 50%;
+            bottom: 160px;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 5;
+        }
+
+        .bit-switch {
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: 1px solid #444;
+            border-radius: 0;
+            background: #080808;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .bit-switch:hover {
+            border-color: #777;
+            background: #151515;
+        }
+
+        .bit-switch.on {
+            background: #eee;
+            border-color: #eee;
+        }
+
+        .bit-switch.on:hover {
+            background: #fff;
+        }
+
+        .bit-switch:focus-visible {
+            outline: 1px solid #aaa;
+            outline-offset: 3px;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
@@ -274,6 +314,17 @@
         </section>
     </main>
 
+    <div class="lock-panel">
+        <button class="bit-switch" type="button" data-bit="0" aria-label="1" aria-pressed="false"></button>
+        <button class="bit-switch" type="button" data-bit="1" aria-label="2" aria-pressed="false"></button>
+        <button class="bit-switch" type="button" data-bit="2" aria-label="3" aria-pressed="false"></button>
+        <button class="bit-switch" type="button" data-bit="3" aria-label="4" aria-pressed="false"></button>
+        <button class="bit-switch" type="button" data-bit="4" aria-label="5" aria-pressed="false"></button>
+        <button class="bit-switch" type="button" data-bit="5" aria-label="6" aria-pressed="false"></button>
+        <button class="bit-switch" type="button" data-bit="6" aria-label="7" aria-pressed="false"></button>
+        <button class="bit-switch" type="button" data-bit="7" aria-label="8" aria-pressed="false"></button>
+    </div>
+
     <div id="fade"></div>
 
     <script>
@@ -332,6 +383,35 @@
                 window.scrollTo(0, 0);
                 fade.classList.remove("active");
             }, 1300);
+        });
+
+        const switches = [...document.querySelectorAll(".bit-switch")];
+        const correctCode = "01001001";
+        let unlocked = false;
+
+        switches.forEach((button) => {
+            button.addEventListener("click", () => {
+                if (unlocked) return;
+
+                const isOn = button.dataset.state !== "1";
+
+                button.dataset.state = isOn ? "1" : "0";
+                button.classList.toggle("on", isOn);
+                button.setAttribute("aria-pressed", String(isOn));
+
+                const code = switches
+                    .map((item) => item.dataset.state || "0")
+                    .join("");
+
+                if (code === correctCode) {
+                    unlocked = true;
+                    fade.classList.add("active");
+
+                    setTimeout(() => {
+                        window.location.href = "serverroom.html";
+                    }, 1300);
+                }
+            });
         });
     </script>
 </body>
